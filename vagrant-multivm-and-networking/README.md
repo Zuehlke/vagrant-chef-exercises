@@ -42,7 +42,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-14.04"
   config.vm.define "web" do |web|
     web.vm.provision "shell", inline: "apt-get install apache2 -y"
-    web.vm.vm.network "forwarded_port", guest: 80, host: 8080
+    web.vm.network "forwarded_port", guest: 80, host: 8080
   end
 end
 ```
@@ -55,7 +55,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-14.04"
   config.vm.define "web" do |web|
     web.vm.provision "shell", inline: "apt-get install apache2 -y"
-    config.vm.network "private_network", ip: "172.16.40.80"
+    web.vm.network "private_network", ip: "172.16.40.80"
   end
 end
 ```
