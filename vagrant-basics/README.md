@@ -1,11 +1,9 @@
 
 ## Vagrant Basics
 
-You can find the official documentation here:
+Covering the essential Vagrant basics. You can find more documentation here:
 
  * https://docs.vagrantup.com/v2/
-
-Below are just some
 
 ### Some commands to exercise
 
