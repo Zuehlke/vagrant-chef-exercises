@@ -13,7 +13,7 @@ Add an inline shell provisioner:
 Vagrant.configure(2) do |config|
   config.vm.box = "bento/ubuntu-14.04"
   config.vm.provision "shell", inline: "echo hello zdays!"
-end
+end
 ```
 
 The provisioners will run at the first `vagrant up`. Once the VM is up and running, you trigger the provisioners like that:
@@ -37,7 +37,7 @@ Vagrant.configure(2) do |config|
     echo "Hello, Chuck Norris" > /tmp/hello.txt
     cat /tmp/hello.txt
   EOF
-end
+end
 ```
 
 ### Using Script Files
@@ -53,5 +53,5 @@ echo "hello $1"
 Vagrant.configure(2) do |config|
   config.vm.box = "bento/ubuntu-14.04"
   config.vm.provision "shell", path: "say_hello.sh", args: "zdays!"
-end
+end
 ```

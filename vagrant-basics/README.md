@@ -47,7 +47,7 @@ Most simple one:
 ```ruby
 Vagrant.configure(2) do |config|
   config.vm.box = "bento/ubuntu-14.04"
-end
+end
 ```
 
 Setting name, CPU & memory for Virtualbox provider:
@@ -65,7 +65,7 @@ Vagrant.configure(2) do |config|
       "--cpus", 4
     ]
   end
-end
+end
 ```
 
 ### Baseboxes
@@ -94,7 +94,7 @@ If you want to turn that off:
 Vagrant.configure(2) do |config|
   config.vm.box = "bento/ubuntu-14.04"
   config.vm.synced_folder ".", "/vagrant", disabled: true
-end
+end
 ```
 
 Or, if you want to add an additional synced folder:
@@ -102,5 +102,5 @@ Or, if you want to add an additional synced folder:
 Vagrant.configure(2) do |config|
   config.vm.box = "bento/ubuntu-14.04"
   config.vm.synced_folder "/some/path/on/host/", "/var/www/"
-end
+end
 ```
