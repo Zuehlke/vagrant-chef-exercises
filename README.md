@@ -31,3 +31,14 @@ Windows is really sloooooooooow. Before we continue, let's switch to a Linux-bas
 A very minimal introduction to Chef, just enough for showing the Chef DSL and Vagrant integration:
 
  * [vagrant-chef-introduction](./vagrant-chef-introduction)
+
+## Test-Driven Cookbook Development with Chef
+
+First let's briefly revisit the cookbook structure and how to create it:
+
+ * [chef-creating-cookbooks](./chef-creating-cookbooks)
+
+Infrastructure-as-code means infrastructure IS code, that means also want to treat it
+with the same care and love as our application code, which means we also want to test it :-)
+
+ * [chef-tdd-environment](./chef-tdd-environment)
