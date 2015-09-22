@@ -44,3 +44,4 @@ with the same care and love as our application code, which means we also want to
  * [chef-tdd-environment](./chef-tdd-environment)
  * [chef-tdd-rubocop](./chef-tdd-rubocop)
  * [chef-tdd-foodcritic](./chef-tdd-foodcritic)
+ * [chef-tdd-chefspec](./chef-tdd-chefspec)
