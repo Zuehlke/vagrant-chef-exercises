@@ -58,19 +58,19 @@ to specify all your development dependencies:
 source 'https://rubygems.org'
 
 gem 'chef', '12.4.1'
-gem 'berkshelf', '3.2.4'
+gem 'berkshelf', '4.0.1'
 
 group :test do
   gem 'foodcritic', '5.0.0'
-  gem 'rubocop', '0.34.2'
-  gem 'chefspec', '4.3.0'
+  gem 'rubocop', '0.35.1'
+  gem 'chefspec', '4.4.0'
 end
 
 group :integration do
   gem 'test-kitchen', '1.4.2'
   gem 'kitchen-docker', '2.1.0'
-  gem 'kitchen-vagrant', '0.18.0'
-  gem 'serverspec', '2.21.1'
+  gem 'kitchen-vagrant', '0.19.0'
+  gem 'serverspec', '2.24.3'
 end
 ```
 
@@ -86,7 +86,7 @@ $ bundle exec foodcritic -V
 foodcritic 5.0.0
 
 $ bundle exec rubocop -v
-0.34.2
+0.35.1
 ```
 
 Essentially, this allows your cookbook projects to safely evolve independently from each other.
