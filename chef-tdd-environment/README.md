@@ -13,19 +13,19 @@ All of these tools come bundled with [ChefDK](https://downloads.chef.io/chef-dk/
 the "Chef Development Kit", in a specific version:
 ```
 $ chef -v
-Chef Development Kit Version: 0.7.0
-chef-client version: 12.4.1
-berks version: 3.2.4
-kitchen version: 1.4.2
+Chef Development Kit Version: 0.13.21
+chef-client version: 12.9.41
+berks version: 4.3.2
+kitchen version: 1.7.3
 
 $ rubocop -v
-0.33.0
+0.37.2
 
 $ foodcritic -V
-foodcritic 4.0.0
+foodcritic 6.1.1
 
 $  kitchen -v
-Test Kitchen version 1.4.2
+Test Kitchen version 1.7.3
 ```
 
 ChefSpec, Fauhai and Serverspec are only libraries, not commandline tools. They
@@ -35,15 +35,15 @@ $ gem list chefspec fauxhai serverspec --no-details
 
 *** LOCAL GEMS ***
 
-chefspec (4.3.0)
+chefspec (4.6.1)
 
 *** LOCAL GEMS ***
 
-fauxhai (2.3.0)
+fauxhai (3.2.0)
 
 *** LOCAL GEMS ***
 
-serverspec (2.21.0)
+serverspec (2.31.1)
 ```
 
 ### Using a Gemfile to lock your Environment
@@ -57,20 +57,20 @@ to specify all your development dependencies:
 ```ruby
 source 'https://rubygems.org'
 
-gem 'chef', '12.4.1'
-gem 'berkshelf', '4.0.1'
+gem 'chef', '12.9.41'
+gem 'berkshelf', '4.3.2'
 
 group :test do
-  gem 'foodcritic', '5.0.0'
-  gem 'rubocop', '0.35.1'
-  gem 'chefspec', '4.4.0'
+  gem 'foodcritic', '6.2.0'
+  gem 'rubocop', '0.40.0'
+  gem 'chefspec', '4.6.1'
 end
 
 group :integration do
-  gem 'test-kitchen', '1.4.2'
-  gem 'kitchen-docker', '2.1.0'
-  gem 'kitchen-vagrant', '0.19.0'
-  gem 'serverspec', '2.24.3'
+  gem 'test-kitchen', '1.8.0'
+  gem 'kitchen-docker', '2.4.0'
+  gem 'kitchen-vagrant', '0.20.0'
+  gem 'serverspec', '2.34.0'
 end
 ```
 
@@ -83,10 +83,10 @@ have the gems specified in the `Gemfile.lock` in the LOAD_PATH and thus see only
 specific versions, ignoring any other installed gems on your system:
 ```
 $ bundle exec foodcritic -V
-foodcritic 5.0.0
+foodcritic 6.2.0
 
 $ bundle exec rubocop -v
-0.35.1
+0.40.0
 ```
 
 Essentially, this allows your cookbook projects to safely evolve independently from each other.
