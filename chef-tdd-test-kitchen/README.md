@@ -38,7 +38,7 @@ driver:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 12.4.1
+  require_chef_omnibus: 12.9.41
   chef_omnibus_install_options: -d /tmp/vagrant-cache/vagrant_omnibus
   client_rb:
     add_formatter: min  
@@ -58,67 +58,76 @@ That's enough for running it, as usual via one of our Rake tasks:
 ```
 $ rake integration
 kitchen test --log-level info
------> Starting Kitchen (v1.4.2)
+-----> Starting Kitchen (v1.8.0)
 -----> Cleaning up any prior instances of <default-ubuntu-1404>
 -----> Destroying <default-ubuntu-1404>...
        Finished destroying <default-ubuntu-1404> (0m0.00s).
 -----> Testing <default-ubuntu-1404>
 -----> Creating <default-ubuntu-1404>...
        Bringing machine 'default' up with 'docker' provider...
-       ==> default: Creating the container...    default:   Name: kitchen-myapp-default-ubuntu-1404_default_1442960913    default:  Image: tknerr/baseimage-ubuntu:14.04    default: Volume: /home/tkn/.vagrant.d/cache/tknerr/baseimage-ubuntu-14.04:/tmp/vagrant-cache    default:   Port: 127.0.0.1:2222:22    default:  
-       ==> default: Starting container...==> default: Waiting for machine to boot. This may take a few minutes...
-           default: SSH address: 172.17.0.18:22
+       ==> default: Creating the container...
+           default:   Name: kitchen-myapp-default-ubuntu-1404_default_1463015135
+           default:  Image: tknerr/baseimage-ubuntu:14.04
+           default: Volume: /home/vagrant/.vagrant.d/cache/tknerr/baseimage-ubuntu-14.04:/tmp/vagrant-cache
+           default:   Port: 127.0.0.1:2222:22
+           default:  
+           default: Container created: e10d74ed6499ce4d
+       ==> default: Starting container...
+       ==> default: Waiting for machine to boot. This may take a few minutes...
+           default: SSH address: 172.17.0.3:22
            default: SSH username: vagrant
            default: SSH auth method: private key
-           default:
+           default: 
            default: Vagrant insecure key detected. Vagrant will automatically replace
            default: this with a newly generated keypair for better security.
-           default:
+           default: 
            default: Inserting generated public key within guest...
-           default: Removing insecure key from the guest if it's present...    default: Key inserted! Disconnecting and reconnecting using new SSH key...
-       ==> default: Machine booted and ready!==> default: Configuring cache buckets...==> default: Running provisioner: shell...
+           default: Removing insecure key from the guest if it's present...
+           default: Key inserted! Disconnecting and reconnecting using new SSH key...
+       ==> default: Machine booted and ready!
+       ==> default: Configuring cache buckets...
+       ==> default: Running provisioner: shell...
            default: Running: inline script
        ==> default: stdin: is not a tty
        ==> default: Configuring cache buckets...
        [SSH] Established
        Vagrant instance <default-ubuntu-1404> created.
-       Finished creating <default-ubuntu-1404> (0m9.36s).
+       Finished creating <default-ubuntu-1404> (0m8.20s).
 -----> Converging <default-ubuntu-1404>...
        Preparing files for transfer
        Preparing dna.json
-       Resolving cookbook dependencies with Berkshelf 3.2.4...
+       Resolving cookbook dependencies with Berkshelf 4.3.2...
        Removing non-cookbook files before transfer
        Preparing validation.pem
        Preparing client.rb
------> Installing Chef Omnibus (12.4.1)
+-----> Installing Chef Omnibus (12.9.41)
        Downloading https://www.chef.io/chef/install.sh to file /tmp/install.sh
        Trying wget...
        Download complete.
-       Downloading Chef 12.4.1 for ubuntu...
-       downloading https://www.chef.io/chef/metadata?v=12.4.1&prerelease=false&nightlies=false&p=ubuntu&pv=14.04&m=x86_64
-         to file /tmp/install.sh.466/metadata.txt
+       ubuntu 14.04 x86_64
+       Getting information for chef stable 12.9.41 for ubuntu...
+       downloading https://omnitruck-direct.chef.io/stable/chef/metadata?v=12.9.41&p=ubuntu&pv=14.04&m=x86_64
+         to file /tmp/install.sh.471/metadata.txt
        trying wget...
-       url	https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/10.04/x86_64/chef_12.4.1-1_amd64.deb
-       md5	6229586196a433b0ddf8f72cd4e85533
-       sha256	bb2bdaa0c551fff21ccdf37dab75fc71374b521c419f1af51d1eab3ea2c791ba
+       sha1	7fa9fec0ea5d3b6de8bfaed8798a77f3fab2f2a3
+       sha256	4ce410534c1d967e5919ac759eb1f31603c063b3a682ac8b7e0ca08657d356a9
+       url	https://packages.chef.io/stable/ubuntu/14.04/chef_12.9.41-1_amd64.deb
+       version	12.9.41
        downloaded metadata file looks valid...
-       /tmp/vagrant-cache/vagrant_omnibus/chef_12.4.1-1_amd64.deb already exists, verifiying checksum...
+       /tmp/vagrant-cache/vagrant_omnibus/chef_12.9.41-1_amd64.deb already exists, verifiying checksum...
        Comparing checksum with sha256sum...
        checksum compare succeeded, using existing file!
-       Installing Chef 12.4.1
+       Installing chef 12.9.41
        installing with dpkg...
        Selecting previously unselected package chef.
 (Reading database ... 16007 files and directories currently installed.)
-       Preparing to unpack .../chef_12.4.1-1_amd64.deb ...
-       Unpacking chef (12.4.1-1) ...
-       Setting up chef (12.4.1-1) ...
+       Preparing to unpack .../chef_12.9.41-1_amd64.deb ...
+       Unpacking chef (12.9.41-1) ...
+       Setting up chef (12.9.41-1) ...
        Thank you for installing Chef!
        Transferring files to <default-ubuntu-1404>
-       Starting Chef Client, version 12.4.1
-       [2015-09-22T22:28:49+00:00] WARN: Child with name 'dna.json' found in multiple directories: /tmp/kitchen/dna.json and /tmp/kitchen/dna.json
-       [2015-09-22T22:28:49+00:00] WARN: Child with name 'dna.json' found in multiple directories: /tmp/kitchen/dna.json and /tmp/kitchen/dna.json
+       Starting Chef Client, version 12.9.41
        resolving cookbooks for run list: ["myapp::default"]
-       [2015-09-22T22:28:49+00:00] WARN: Child with name 'dna.json' found in multiple directories: /tmp/kitchen/dna.json and /tmp/kitchen/dna.json
        Synchronizing cookbooks
        .done.
        Compiling cookbooks
@@ -126,21 +135,21 @@ kitchen test --log-level info
        Converging 3 resources
        UU.U
        System converged.
-
+       
        resources updated this run:
        * apt_package[apache2]
-         - install version 2.4.7-1ubuntu4.5 of package apache2
+         - install version 2.4.7-1ubuntu4.9 of package apache2
          - start service service[apache2]
-
+       
        * service[apache2]
-         - install version 2.4.7-1ubuntu4.5 of package apache2
+         - install version 2.4.7-1ubuntu4.9 of package apache2
          - start service service[apache2]
-
+       
        * template[/var/www/html/index.html]
          - update content in file /var/www/html/index.html from 538f31 to 522276
-
+       
        chef client finished, 3 resources updated
-       Finished converging <default-ubuntu-1404> (0m16.85s).
+       Finished converging <default-ubuntu-1404> (0m20.89s).
 -----> Setting up <default-ubuntu-1404>...
        Finished setting up <default-ubuntu-1404> (0m0.00s).
 -----> Verifying <default-ubuntu-1404>...
@@ -149,19 +158,17 @@ kitchen test --log-level info
        Successfully installed thor-0.19.0
        Successfully installed busser-0.7.1
        2 gems installed
------> Setting up Busser
-       Creating BUSSER_ROOT in /tmp/verifier
-       Creating busser binstub
        Installing Busser plugins: busser-serverspec
-       Plugin serverspec installed (version 0.5.7)
+       Plugin serverspec installed (version 0.5.9)
 -----> Running postinstall for serverspec plugin
        Suite path directory /tmp/verifier/suites does not exist, skipping.
        Transferring files to <default-ubuntu-1404>
 -----> Running serverspec test suite
 -----> Installing Serverspec..
------> serverspec installed (version 2.24.0)
+-----> serverspec installed (version 2.34.0)
+       /opt/chef/embedded/bin/ruby -I/tmp/verifier/suites/serverspec -I/tmp/verifier/gems/gems/rspec-support-3.4.1/lib:/tmp/verifier/gems/gems/rspec-core-3.4.4/lib /opt/chef/embedded/bin/rspec --pattern /tmp/verifier/suites/serverspec/\*\*/\*_spec.rb --color --format documentation --default-path /tmp/verifier/suites/serverspec
        /opt/chef/embedded/bin/ruby -I/tmp/verifier/suites/serverspec -I/tmp/verifier/gems/gems/rspec-support-3.3.0/lib:/tmp/verifier/gems/gems/rspec-core-3.3.2/lib /opt/chef/embedded/bin/rspec --pattern /tmp/verifier/suites/serverspec/\*\*/\*_spec.rb --color --format documentation --default-path /tmp/verifier/suites/serverspec
-
+       
        myapp::default
          does something (PENDING: Replace this with meaningful tests)
 
@@ -178,17 +185,17 @@ kitchen test --log-level info
        Finished verifying <default-ubuntu-1404> (0m18.83s).
 -----> Destroying <default-ubuntu-1404>...
        ==> default: Stopping container...
-       ==> default: Deleting the container...==> default: Running cleanup tasks for 'shell' provisioner...
+       ==> default: Deleting the container...
        Vagrant instance <default-ubuntu-1404> destroyed.
-       Finished destroying <default-ubuntu-1404> (0m4.15s).
-       Finished testing <default-ubuntu-1404> (0m49.19s).
+       Finished destroying <default-ubuntu-1404> (0m4.98s).
+       Finished testing <default-ubuntu-1404> (0m54.00s).
 -----> Kitchen is finished. (0m49.66s)
 ```
 
 As you can see, this already:
 
  * spun up a fresh ubuntu 14.04 docker container (via Vagrant)
- * downloaded and installed chef-client 12.4.1
+ * downloaded and installed chef-client 12.9.41
  * started a chef run and converged the system
  * installed serverspec and ran the tests
 
@@ -218,7 +225,7 @@ Instance             Driver   Provisioner  Verifier  Transport  Last Action
 default-ubuntu-1404  Vagrant  ChefZero     Busser    Ssh        <Not Created>
 
 $ bundle exec kitchen converge
------> Starting Kitchen (v1.4.2)
+-----> Starting Kitchen (v1.8.0)
 -----> Creating <default-ubuntu-1404>...
        Bringing machine 'default' up with 'docker' provider...
 
@@ -322,7 +329,7 @@ Since the docker container is still running from the previous step, we only
 want to trigger the verification:
 ```
 $ bundle exec kitchen verify
------> Starting Kitchen (v1.4.2)
+-----> Starting Kitchen (v1.8.0)
 -----> Verifying <default-ubuntu-1404>...
        Preparing files for transfer
 -----> Busser installation detected (busser)
@@ -383,7 +390,7 @@ If we want to run only that suite now, we can do so by specifying a regex that
 matches "with-content-ubuntu-1404":
 ```
 $ bundle exec kitchen verify content
------> Starting Kitchen (v1.4.2)
+-----> Starting Kitchen (v1.8.0)
 -----> Creating <with-content-ubuntu-1404>...
        Bringing machine 'default' up with 'docker' provider...
 
