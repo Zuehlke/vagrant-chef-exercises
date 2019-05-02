@@ -101,3 +101,21 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "/some/path/on/host/", "/var/www/"
 end
 ```
+
+### Snapshots
+
+You can easily take and restore VM snapshots via vagrant (given the underlying provider supports it):
+```
+$ vagrant snapshot save "initial-state"
+$ vagrant snapshot list
+```
+
+Let's assume you just borked the VM and want to restore to the earlier state:
+```
+$ vagrant snapshot restore "initial-state"
+```
+
+Once you no longer need that snapshot, you can also delete it:
+```
+$ vagrant snapshot delete "initial-state"
+```
