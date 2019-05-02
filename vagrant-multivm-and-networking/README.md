@@ -6,7 +6,7 @@
 Use a `config.vm.define` block for defining multiple VMs within a single `Vagrantfile`:
 ```ruby
 Vagrant.configure("2") do |config|
-  config.vm.box = "bento/ubuntu-14.04"
+  config.vm.box = "ubuntu/bionic64"
   # web server VM
   config.vm.define "web" do |web|
     web.vm.provision "shell", inline: "apt-get install apache2 -y"
@@ -39,7 +39,7 @@ You can either do port-forwarding or set up a private host-only network for comm
 Configure port-forwarding like this:
 ```ruby
 Vagrant.configure("2") do |config|
-  config.vm.box = "bento/ubuntu-14.04"
+  config.vm.box = "ubuntu/bionic64"
   config.vm.define "web" do |web|
     web.vm.provision "shell", inline: "apt-get install apache2 -y"
     web.vm.network "forwarded_port", guest: 80, host: 8080
@@ -52,7 +52,7 @@ Now you should be able to access your VM like via the forwarded port: http://loc
 Using host-only networks is similarly easy:
 ```ruby
 Vagrant.configure("2") do |config|
-  config.vm.box = "bento/ubuntu-14.04"
+  config.vm.box = "ubuntu/bionic64"
   config.vm.define "web" do |web|
     web.vm.provision "shell", inline: "apt-get install apache2 -y"
     web.vm.network "private_network", ip: "172.16.40.80"
@@ -71,12 +71,12 @@ It also adds some "Ruby magic" to reduce code duplication (the Vagrantfile is ju
 ```ruby
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "bento/ubuntu-14.04"
+  config.vm.box = "ubuntu/bionic64"
 
   # load balancer VM
   config.vm.define "lb" do |lb_config|
     lb_config.vm.network "private_network", ip: "192.168.40.90"
-    lb_config.vm.provision "shell", inline: <<-EOF
+    lb_config.vm.provision "shell", inline: <<~EOF
       sudo apt-get update
       sudo apt-get install nginx -y
       cat << CONF > /etc/nginx/sites-available/default
