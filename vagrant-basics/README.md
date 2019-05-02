@@ -9,14 +9,14 @@ Covering the essential Vagrant basics. You can find more documentation here:
 
 Creating a Vagrantfile:
 ```
-$ vagrant init ubuntu/bionic64 --minimal
+$ vagrant init ubuntu/xenial64 --minimal
 ```
 
 Interacting with the Vagrant VM:
 ```
 $ vagrant up
 $ vagrant ssh
-$ vagrant ssh -c "pwd"
+$ vagrant ssh -c "cat /etc/lsb-release"
 $ vagrant halt
 $ vagrant reload
 $ vagrant destroy -f
