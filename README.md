@@ -22,6 +22,7 @@ A short introduction to Vagrant, covering the essential concepts:
  * [vagrant-shell-provisioner](./vagrant-shell-provisioner)
  * [vagrant-multivm-and-networking](./vagrant-multivm-and-networking)
  * [vagrant-with-windows](./vagrant-with-windows)
+ * [vagrant-with-docker](./vagrant-with-docker)
 
 ## Chef + Vagrant Introduction
 

@@ -13,28 +13,6 @@ List of builtin Chef resources:
  * https://docs.chef.io/resources.html
 
 
-### Creating your first Vagrant VM with the docker provider
-
-Create a new Vagrantfile, this time using the [`tknerr/baseimage-ubuntu-14.04`
-basebox](https://github.com/tknerr/vagrant-docker-baseimages), since we switched
-to the Linux-based development environment where we use "docker" as the default
-Vagrant provider:
-```
-$ vagrant init tknerr/baseimage-ubuntu-14.04 --minimal
-```
-
-As usual, you can bring up the VM:
-```
-$ vagrant up
-```
-
-(that should have been very very fast compared to virtualbox ;-))
-
-You can check the status as usual via `vagrant status`, but you could also take a look directly to what docker says:
-```
-$ docker ps
-```
-
 ### Adding a Chef Provisioner
 
 The most minimal thing we have to do is creating cookbook with a single recipe
