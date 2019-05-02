@@ -12,6 +12,8 @@ Since we want to start off immediately without any installation hassle, simply g
 
  * [Linus' Kitchen](https://github.com/tknerr/linus-kitchen/releases) - a developer VM with Chef, Vagrant and Docker for cooking on Linux
 
+*Note: make sure to give it enough RAM (8GB should be fine) and also enable VT-x when importing the pre-built .ova VMware image!*
+
 ## Vagrant Introduction
 
 A short introduction to Vagrant, covering the essential concepts:
