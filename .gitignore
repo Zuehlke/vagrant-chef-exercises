@@ -1,2 +1,3 @@
 playground/
 .vagrant/
+*-cloudimg-console.log
