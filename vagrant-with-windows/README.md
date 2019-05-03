@@ -13,13 +13,27 @@ $ vagrant init StefanScherer/windows_10 --minimal
 
 You can interact with the Windows boxes as usual.
 
+### GUI Mode
+
+Many Windows Baseboxes start without a GUI. So you can either got to the VirtualBox GUI, select the VM, and hit the "-> Show" button, or you can enable GUI mode directly in the `Vagrantfile`:
+```ruby
+Vagrant.configure("2") do |config|
+  
+  config.vm.box = "StefanScherer/windows_10"
+
+  # enable the GUI
+  config.vm.provider "virtualbox" do |vbox|
+    vbox.gui = true
+  end
+end
+```
 
 ### PowerShell Provisioning
 
 The shell provisioner uses PowerShell, and for sure you can write inline scripts as well:
 ```ruby
 Vagrant.configure("2") do |config|
-  
+
   config.vm.box = "StefanScherer/windows_10"
 
   # add inline powershell script
@@ -40,13 +54,19 @@ Vagrant.configure("2") do |config|
 end
 ```
 
-### Run Remote Commands via WinRM
+### Run Remote Commands via WinRM / PowerShell
 
 You might be tempted to run `vagrant ssh` at some point in time, however this will likely not work with Windows boxes.
 
-Instead you can run `vagrant winrm` which establishes a winrm connection and drops you into a remote PowerShell session:
+If you want to drop into a remote *interactive* PowerShell session, you can do so (currently on Windows hosts only) via:
 ```
-$ vagrant winrm
+$ vagrant powershell
+```
+
+If you want to run one-off PowerShell or CMD command, you can use `vagrant winrm` to establish a winrm connection and run the supplied command (this works from Linux hosts, too):
+```
+$ vagrant winrm -c "Write-Host 'hello from remote powershell'" -s powershell
+$ vagrant winrm -c "@echo hello from remote cmd" -s cmd
 ```
 
 ### Log in via RDP
