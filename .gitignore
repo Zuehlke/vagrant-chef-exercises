@@ -2,3 +2,4 @@ playground/
 .vagrant/
 *-cloudimg-console.log
 nodes/
+berks-cookbooks/
