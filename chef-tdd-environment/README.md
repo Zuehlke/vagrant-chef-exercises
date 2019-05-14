@@ -49,7 +49,7 @@ fauxhai (6.11.0)
 serverspec (2.41.3)
 ```
 
-### Pro Tip: use a Rakefile
+### Consider using a Rakefile
 
 A `Rakefile` in Ruby is quite similar to a Makefile -- it let's you define the tasks
 your are expected to run in a central place.
@@ -91,3 +91,6 @@ rake unit         # run all unit-level tests
 ```
 
 Running a task then becomes as simple as running `rake foodcritic` or `rake unit`.
+
+***Note:** for the remainder of this workshop we will use the Chef commands directly,
+which is a better way to get familiar with them and memoize them.*

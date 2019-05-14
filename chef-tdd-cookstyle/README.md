@@ -9,10 +9,9 @@ on Ruby code level you usually use:
 
 ### Running Cookstyle Linting
 
-The first thing to run is `rake cookstyle`:
+The first thing to run is `cookstyle`:
 ```
-$ rake cookstyle
-cookstyle .
+$ cookstyle .
 Inspecting 7 files
 C......
 
@@ -26,11 +25,6 @@ task :unit => [:cookstyle, :foodcritic, :chefspec]
                                                   
 
 7 files inspected, 2 offenses detected
-rake aborted!
-Command failed with status (1): [cookstyle ....]
-/home/user/vagrant-chef-exercises/tdd-myapp/cookbooks/myapp/Rakefile:3:in `block in <top (required)>'
-Tasks: TOP => cookstyle
-(See full trace by running task with --trace)
 ```
 
 And ooops, it already found something in our `Rakefile`. We are using the outdated Ruby 1.9 syntax here and should use the Ruby 2.0 syntax instead.
@@ -43,10 +37,9 @@ task unit: [:cookstyle, :foodcritic, :chefspec]
 
 ```
 
-Now tha we run cookstyle again:
+Now that we run cookstyle again:
 ```
-$ rake cookstyle
-cookstyle .
+$ cookstyle .
 Inspecting 7 files
 .......
 
@@ -93,8 +86,7 @@ This excludes the Rakefile generally, allows line-length to exceed the 80 chars 
 
 This would also make it pass again:
 ```
-$ rake cookstyle
-cookstyle .
+$ cookstyle .
 Inspecting 6 files
 ......
 
