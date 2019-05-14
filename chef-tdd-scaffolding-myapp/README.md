@@ -7,20 +7,23 @@ and how to scaffold / generate them.
 ### The MyApp Scenario
 
 Our scenario for the remainder of this workshop is a sample web application called "myapp".
+
 It's a super simple web application that will be set up using a Chef cookbook with the same
 name and is just good enough to get to know the Chef TDD tools.
 
+It will live in it's own Git repository (one repository per cookbook is a common practice
+and has various benefits), so let's create a new workspace for it in `~/myapp`.
+
 ### Generating the MyApp Cookbook
 
-The ChefDK includes a command called `chef`, which lets you very easily create
-a new cookbook structure (**note:** you must place it into a directory named cookbooks!):
+The ChefDK includes a command called `chef`, which lets you easily create a new cookbook structure.
+Let's make sure to run it from the home directory so that it creates the cookbook in `~/myapp`:
 ```
-$ mkdir cookbooks
-$ cd cookbooks
-$ chef generate cookbook myapp
+$ cd ~
+$ chef generate cookbook myapp --copyright "Zuehlke Engineering GmbH" --email "your.name@zuehlke.com" --license mit
 ```
 
-This scaffolds a cookbook structure with the basic skeleton files for
+The above `chef generate` command scaffolded a cookbook structure with the basic skeleton files for
 testing already included:
 ```
 myapp/
@@ -41,6 +44,16 @@ myapp/
     └── integration
         └── default
             └── default_test.rb
+```
+
+It also initialized a Git repo in `~/myapp/.git` for us so we don't need to ;-)
+```
+$ cd ~/myapp
+$ git slog
+580eda0 (HEAD -> master) Merge branch 'add-delivery-configuration'
+5af03a2 Add generated cookbook content
+df5e2a7 Add generated delivery build cookbook
+89682d6 Add generated delivery configuration
 ```
 
 *Feel free to inspect the generated files already. Many of them will not be needed for now, 
