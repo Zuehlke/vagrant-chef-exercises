@@ -31,7 +31,7 @@ Test Kitchen version 1.24.0
 ```
 
 ChefSpec, Fauhai and Serverspec are only libraries, not commandline tools. They
-are also bundled at a very specific version:
+are also bundled at a very specific version within the ChefDK:
 ```
 $ gem list chefspec fauxhai serverspec --no-details
 
@@ -48,59 +48,12 @@ fauxhai (6.11.0)
 serverspec (2.41.3)
 ```
 
-### Pro Tip: Using a Gemfile to lock your Environment
-
-Having all the tools bundled with ChefDK is comfortable for getting started quickly,
-but also comes at a cost: you might have updated your ChefDK in the meanwhile and
-once you work with an older cookbook nothing might work anymore!
-
-In order to avoid that, you should create a `Gemfile` (for each cookbook structure / repository)
-to specify all your development dependencies:
-```ruby
-source 'https://rubygems.org'
-
-gem 'chef', '14.12.3'
-gem 'berkshelf', '7.0.8'
-
-group :test do
-  gem 'foodcritic', '15.1.0'
-  gem 'rubocop', '0.55.0'
-  gem 'chefspec', '7.3.4'
-end
-
-group :integration do
-  gem 'test-kitchen', '1.24.0'
-  gem 'kitchen-docker', '2.9.0'
-  gem 'kitchen-vagrant', '1.5.2'
-  gem 'serverspec', '2.41.3'
-end
-```
-
-Once you run `bundle install` [bundler](bundler.io) will create an `Gemfile.lock`
-with all the dependencies (and their transitive dependencies) locked to the resolved
-version. If the `Gemfile.lock` already exists, it will use exactly the versions specified therein.
-
-Now whenever you run a command prefixed with `bundle exec <command>`, it will only
-have the gems specified in the `Gemfile.lock` in the LOAD_PATH and thus see only the
-specific versions, ignoring any other installed gems on your system:
-```
-$ bundle exec foodcritic -V
-foodcritic 15.1.0
-
-$ bundle exec rubocop -v
-0.55.0
-```
-
-Essentially, this allows your cookbook projects to safely evolve independently from each other.
-
 ### Pro Tip: use a Rakefile
 
 A `Rakefile` in Ruby is quite similar to a Makefile -- it let's you define the tasks
-your are expected to run in a central place. It also integrates quite nicely with
-bundler, so that you don't have to specify the `bundle exec` prefix anymore when you
-run a rake task.
+your are expected to run in a central place.
 
-This is a `Rakefile` like I commonly use for cookbook projects:
+This is a `Rakefile` that can be commonly used for cookbook projects:
 ```ruby
 require 'bundler/setup'
 
