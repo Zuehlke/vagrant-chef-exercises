@@ -4,7 +4,8 @@
 Lint checks find easy to catch bugs and ensure a consistent coding style. For linting Chef cookbooks
 on Ruby code level you usually use:
 
- * https://docs.chef.io/cookstyle.html
+ * [cookstyle](https://docs.chef.io/cookstyle.html)
+ * (which is based on [rubocop](https://github.com/rubocop-hq/rubocop))
 
 ### Running Cookstyle Linting
 
