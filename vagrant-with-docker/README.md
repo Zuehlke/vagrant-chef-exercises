@@ -35,3 +35,11 @@ You will also find the underlying docker image representing the basebox:
 ```
 $ docker images
 ```
+
+### Known Issues with the Vagrant Docker Provider
+
+Some things might not be working as expected with the docker provider:
+
+ * synced folders are not created on `vagrant reload` -- you really have to destroy the VM
+ * networking: `private_network` settings are ignored, but `forwarded_port` works as expected
+
