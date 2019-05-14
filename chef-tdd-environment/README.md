@@ -1,11 +1,11 @@
 
 ## Chef TDD: Environment
 
-The environment we need for Test-Driven Development or ["Test-Driven Infrastructure with Chef"](http://www.amazon.com/Test-Driven-Infrastructure-Chef-Behavior-Driven-Development/dp/1449372201)
-is basically a set of tools, which we want to briefly introduce here:
+The environment we need for ["Test-Driven Infrastructure with Chef"](http://www.amazon.com/Test-Driven-Infrastructure-Chef-Behavior-Driven-Development/dp/1449372201)
+is a set of tools, which we want to briefly introduce here:
 
- * [rubocop](https://github.com/bbatsov/rubocop) is a Ruby-level linting tool
- * [foodcritic](https://acrmp.github.io/foodcritic/) is a linting tool on Chef level
+ * [cookstyle](https://docs.chef.io/cookstyle.html) is a linting tool on Ruby code level
+ * [foodcritic](https://acrmp.github.io/foodcritic/) is a linting tool on Chef cookbook level
  * [chefspec](https://github.com/sethvargo/chefspec) + [fauxhai](https://github.com/customink/fauxhai) is for unit testing Chef cookbooks / mocking platforms
  * [test-kitchen](https://github.com/test-kitchen/test-kitchen) + [serverspec](http://serverspec.org) is an integration testing framework / library for testing servers
 
@@ -20,8 +20,9 @@ berks version: 7.0.8
 kitchen version: 1.24.0
 inspec version: 3.9.3
 
-$ rubocop -v
-0.55.0
+$ cookstyle -v
+Cookstyle 3.0.2
+  * RuboCop 0.55.0
 
 $ foodcritic -V
 foodcritic 15.1.0
@@ -55,11 +56,9 @@ your are expected to run in a central place.
 
 This is a `Rakefile` that can be commonly used for cookbook projects:
 ```ruby
-require 'bundler/setup'
-
-desc 'check Ruby code style with rubocop'
-task :rubocop do
-  sh 'rubocop . --format progress --format offenses'
+desc 'check code style with cookstyle/rubocop'
+task :cookstyle do
+  sh 'cookstyle .'
 end
 
 desc 'run foodcritic lint checks'
@@ -78,7 +77,7 @@ task :integration do
 end
 
 desc 'run all unit-level tests'
-task :unit => [:rubocop, :foodcritic, :chefspec]
+task :unit => [:cookstyle, :foodcritic, :chefspec]
 ```
 
 Whenever you see a `Rakefile` around, you can list the available tasks via `rake -T`:
@@ -87,7 +86,7 @@ $ rake -T
 rake chefspec     # run chefspec examples
 rake foodcritic   # run foodcritic lint checks
 rake integration  # run test-kitchen integration tests
-rake rubocop      # check code style with rubocop
+rake cookstyle    # check code style with cookstyle/rubocop
 rake unit         # run all unit-level tests
 ```
 
