@@ -46,7 +46,7 @@ Infrastructure-as-code means infrastructure IS code, that means also want to tre
 with the same care and love as our application code, which means we also want to test it :-)
 
  * [chef-tdd-environment](./chef-tdd-environment)
- * [chef-tdd-cookstyle](./chef-tdd-cookstyle)
  * [chef-tdd-foodcritic](./chef-tdd-foodcritic)
+ * [chef-tdd-cookstyle](./chef-tdd-cookstyle)
  * [chef-tdd-chefspec](./chef-tdd-chefspec)
  * [chef-tdd-test-kitchen](./chef-tdd-test-kitchen)
