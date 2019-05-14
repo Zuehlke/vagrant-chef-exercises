@@ -1,5 +1,5 @@
 
-## Chef Basics: Using Cookbooks
+## Chef Basics: Intro to Cookbooks
 
 In Chef, cookbooks are the reusable pieces grouping together recipes, attributes,
 templates and files.
