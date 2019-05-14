@@ -1,11 +1,11 @@
 
 ## Chef TDD: Chef-level Linting with Foodcritic
 
-Similar to Rubocop, Foodcritic is also a linting tool for detecting bugs and
-ensure a consistent coding style. However, Foodcritic does the lint checking
-on top of the Chef DSL:
+Similar to Cookstyle, Foodcritic is also a linting tool for detecting bugs and
+ensure a consistent coding style. However, Foodcritic does the linting on the
+Chef DSL / Cookbook level:
 
- * [foodcritic](https://acrmp.github.io/foodcritic/) for Chef-level linting
+ * [foodcritic](http://www.foodcritic.io/) for Chef-level linting
 
 ### Running Foodcritic Linting
 
