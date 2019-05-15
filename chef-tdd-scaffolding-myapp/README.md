@@ -65,3 +65,86 @@ $ chef generate cookbook --help
 $ chef generate --help
 $ chef --help
 ```
+
+### MyApp Service: Adding the initial Recipe
+
+Let's use a combination of what we had earlier to `myapp/recipes/default.rb`:
+```ruby
+package "apache2" do
+  action :install
+end
+
+service "apache2" do
+  action [:enable, :start]
+end
+
+file "/var/www/html/index.html" do
+  content "hello world!"
+end
+
+log "open your browser at http://localhost:8080 to see it running"
+```
+
+### MyApp Service: Make it configurable via Attributes
+
+As already done before, let's also make the myapp cookbook configurable
+with an attribute.
+
+In `myapp/attributes/default.rb` add a "greeter" attribute:
+```ruby
+node.default['myapp']['greeter'] = 'john doe'
+```
+
+Then adapt `myapp/recipes/default.rb` accordingly:
+```ruby
+file "/var/www/html/index.html" do
+  content "hello from #{node['myapp']['greeter']}!"
+end
+```
+
+### MyApp Service: Adding Platform Specifics
+
+In order to add some (artificial) platform specifics, let's simply output
+the current platform and version as reported by [ohai](https://docs.chef.io/ohai.html). 
+
+So in `myapp/recipes/default.rb`:
+```ruby
+file "/var/www/html/index.html" do
+  content <<~HTML
+    <html>
+        <body>
+            Hello from #{node['myapp']['greeter']}!<br/>
+            (sent via #{node['platform']} #{node['platform_version']})
+        </body>
+    </html>
+  HTML
+end
+```
+
+### MyApp Service: Adding Cookbook Dependencies
+
+One of the most commonly re-used cookbooks on debian based systems is the
+[apt cookbook](https://supermarket.chef.io/cookbooks/apt), which ensures
+that we have up-to-date apt package lists before installing anything via apt.
+
+So we need to define the dependency in `myapp/metadata.rb`:
+```ruby
+...
+depends 'apt', '7.1.1'
+...
+```
+
+Also, we need to instruct Berkshelf to respect the dependencies defined in
+the metadata, i.e. add the "metadata" keyword to `myapp/Berksfile`:
+```ruby
+source 'https://supermarket.chef.io'
+
+metadata
+```
+
+And finally, include the "apt::default" recipe in our run list, e.g. by including
+it at the very beginning in `myapp/recipes/default.rb`:
+```ruby
+include_recipe 'apt::default'
+...
+```
