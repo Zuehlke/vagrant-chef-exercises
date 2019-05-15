@@ -160,3 +160,21 @@ Bringing machine 'default' up with 'docker' provider...
 ==> default: Chef Client finished, 1/1 resources updated in 01 seconds
 ==> default: Configuring cache buckets...
 ```
+
+### Overriding Attributes
+
+Now that we have parameterized the cookbook via the `node['hello']['name']`
+attribute we can override that attribute in the `Vagrantfile`:
+```ruby
+Vagrant.configure(2) do |config|
+  ...
+  config.vm.provision "chef_zero" do |chef|
+    ...
+    chef.json = {
+      "hello" => {
+        "name" => "dude"
+      }
+    }
+  end
+end
+```
