@@ -3,7 +3,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision "chef_zero" do |chef|
     chef.version = "14.12.3"
     chef.installer_download_path = "/tmp/vagrant-cache/"
-    chef.nodes_path = "nodes"
+    chef.nodes_path = "."
     chef.add_recipe "hello::default"
   end
 end
