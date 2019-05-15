@@ -78,7 +78,7 @@ In order to run the same cookbook in a Vagrant VM, you can simply use the "chef_
 provisioner and add the "hello::default" recipe to the runlist:
 ```ruby
 Vagrant.configure(2) do |config|
-  config.vm.box = "tknerr/baseimage-ubuntu-14.04"
+  config.vm.box = "tknerr/baseimage-ubuntu-18.04"
   config.vm.provision "chef_zero" do |chef|
     chef.version = "14.12.3"
     chef.installer_download_path = "/tmp/vagrant-cache/"
