@@ -3,8 +3,8 @@
 ChefSpec is an rspec library for unit testing Chef cookbooks, Fauxhai provides
 mocked ohai data for different platforms:
 
-* [chefspec](https://github.com/sethvargo/chefspec)
-* [fauxhai](https://github.com/customink/fauxhai)
+* [chefspec](https://github.com/chefspec/chefspec)
+* [fauxhai](https://github.com/chefspec/fauxhai)
 
 ### Running ChefSpec Examples
 
@@ -14,9 +14,24 @@ for us in `myapp/spec/unit/recipes/default_spec.rb`:
 require 'spec_helper'
 
 describe 'myapp::default' do
-  context 'When all attributes are default, on an unspecified platform' do
+  context 'When all attributes are default, on Ubuntu 16.04' do
     let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new
+      # for a complete list of available platforms and versions see:
+      # https://github.com/customink/fauxhai/blob/master/PLATFORMS.md
+      runner = ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '16.04')
+      runner.converge(described_recipe)
+    end
+
+    it 'converges successfully' do
+      expect { chef_run }.to_not raise_error
+    end
+  end
+
+  context 'When all attributes are default, on CentOS 7.4.1708' do
+    let(:chef_run) do
+      # for a complete list of available platforms and versions see:
+      # https://github.com/customink/fauxhai/blob/master/PLATFORMS.md
+      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '7.4.1708')
       runner.converge(described_recipe)
     end
 
@@ -27,131 +42,104 @@ describe 'myapp::default' do
 end
 ```
 
-As usual you can run the ChefSpec examples via rake, and it should be passing:
+As usual you can run the ChefSpec examples via `rspec` command, and it should be passing:
 ```
-$ rake chefspec
-rspec --format doc --color
+$ rspec --format doc
 
 myapp::default
-  When all attributes are default, on an unspecified platform
+  When all attributes are default, on Ubuntu 16.04
+    converges successfully
+  When all attributes are default, on CentOS 7.4.1708
     converges successfully
 
-Finished in 0.26818 seconds (files took 1.12 seconds to load)
-1 example, 0 failures
+Finished in 0.66223 seconds (files took 2.36 seconds to load)
+2 examples, 0 failures
 ```
 
 ### Adding Tests
 
-Since we specified earlier that we want to install "apache2" and ensure that the
-"apache2" service is started, we could verify that in a unit test by adding some
-more expectations:
-```ruby
-...
-  it 'installs apache webserver' do
-    expect(chef_run).to install_package('apache2')
-  end
-  it 'makes sure the apache service is started' do
-    expect(chef_run).to start_service('apache2')
-  end
-...
-```
+Let's add some meaningful tests here to verify that the chef run would install the "apache2" package,
+start the service, and also render the index.html file with the expected content:
 
-That should pass as well according to our minimal default recipe from the last
-step, which should still look like this:
 ```ruby
-package 'apache2' do
-  action :install
-end
+require 'spec_helper'
 
-service 'apache2' do
-  action :start
+describe 'myapp::default' do
+  context 'on Ubuntu' do
+    platform 'ubuntu'
+    it { is_expected.to install_package('apache2') }
+    it { is_expected.to start_service('apache2') }
+    it { is_expected.to render_file('/var/www/html/index.html').with_content 'Hello from john doe!' }
+  end
 end
 ```
 
-And so should the tests pass:
+And so it does:
 ```
-$ rake chefspec
-rspec --format doc --color
+$ rspec --format doc
 
 myapp::default
-  When all attributes are default, on an unspecified platform
-    converges successfully
-    installs apache webserver
-    makes sure the apache service is started
+  on Ubuntu
+    should install package "apache2"
+    should start service "apache2"
+    should render file "/var/www/html/index.html"
 
-Finished in 0.66116 seconds (files took 1.09 seconds to load)
+Finished in 0.51791 seconds (files took 1.83 seconds to load)
 3 examples, 0 failures
-
 ```
 
-While we are at it, we should also make sure that the service is enabled / started
-when at startup (e.g. when the system is rebooted):
+The actual use case for ChefSpec is for testing variations in the recipe,
+e.g. due to different platforms or user-supplied attributes. So a more complete
+spec for our scenario would look like this:
+
 ```ruby
-...
-  it 'enables the apache service when the system starts up' do
-    expect(chef_run).to enable_service('apache2')
+require 'spec_helper'
+
+describe 'myapp::default' do
+  context 'on Ubuntu' do
+    platform 'ubuntu'
+    it { is_expected.to install_package('apache2') }
+    it { is_expected.to start_service('apache2') }
+    it { is_expected.to render_file('/var/www/html/index.html').with_content 'Hello from john doe!' }
+
+    context 'with custom greeter configured' do
+      default_attributes['myapp']['greeter'] = 'peter parker'
+      it { is_expected.to render_file('/var/www/html/index.html').with_content 'Hello from john doe!' }
+    end
+
+    context 'on 18.04' do
+      platform 'ubuntu', '18.04'
+      it { is_expected.to render_file('/var/www/html/index.html').with_content 'ubuntu 18.04' }
+    end
+
+    context 'on 16.04' do
+      platform 'ubuntu', '16.04'
+      it { is_expected.to render_file('/var/www/html/index.html').with_content 'ubuntu 16.04' }
+    end
   end
-...
-```
-
-This will probably be failing...
-```
-$ rake chefspec
-rspec --format doc --color
-
-myapp::default
-  When all attributes are default, on an unspecified platform
-    converges successfully
-    installs apache webserver
-    makes sure the apache service is started
-    enables the apache service when the system starts up (FAILED - 1)
-
-Failures:
-
-  1) myapp::default When all attributes are default, on an unspecified platform enables the apache service when the system starts up
-     Failure/Error: expect(chef_run).to enable_service("apache2")
-       expected "service[apache2]" actions [:start] to include :enable
-     # ./spec/unit/recipes/default_spec.rb:26:in `block (3 levels) in <top (required)>'
-
-Finished in 0.88344 seconds (files took 1.11 seconds to load)
-4 examples, 1 failure
-
-Failed examples:
-
-rspec ./spec/unit/recipes/default_spec.rb:25 # myapp::default When all attributes are default, on an unspecified platform enables the apache service when the system starts up
-
-rake aborted!
-Command failed with status (1): [rspec --format doc --color...]
-/home/tkn/zdays/zdays2015-demo-repo/playground/myapp/Rakefile:15:in `block in <top (required)>'
-Tasks: TOP => chefspec
-(See full trace by running task with --trace)
-```
-
-...until we fix it in our `default.rb` recipe:
-```ruby
-...
-service 'apache2' do
-  action [:start, :enable]
 end
-...
 ```
 
-And we see it passing!
+...which is still super fast:
 ```
-$ rake chefspec
-rspec --format doc --color
+$ rspec --format doc
 
 myapp::default
-  When all attributes are default, on an unspecified platform
-    converges successfully
-    installs apache webserver
-    makes sure the apache service is started
-    enables the apache service when the system starts up
+  on Ubuntu
+    should install package "apache2"
+    should start service "apache2"
+    should render file "/var/www/html/index.html"
+    with custom greeter configured
+      should render file "/var/www/html/index.html"
+    on 18.04
+      should render file "/var/www/html/index.html"
+    on 16.04
+      should render file "/var/www/html/index.html"
 
-Finished in 0.926 seconds (files took 1.14 seconds to load)
-4 examples, 0 failures
-
+Finished in 0.65563 seconds (files took 1.68 seconds to load)
+6 examples, 0 failures
 ```
+
 
 ### When and What to test with ChefSpec?
 
@@ -169,111 +157,3 @@ So what are useful tests that can be done on ChefSpec / unit level?
 
 Answer: anything that is parameterized (e.g. via attributes, data bags, environments, etc)
 or involves conditional logic (such as platform-specific behavior)
-
-
-### Extending our Tests and Recipes
-
-How useful is a web server without serving any useful content anyway?
-
-So let's get back to work and make it show some great content that can be configured
-via a node attribute. This time we start with a spec test first:
-```ruby
-...
-  context 'with the myapp/page_content attribute set' do
-    let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new do |node|
-        node.set['myapp']['page_content'] = 'ZDays rocks!'
-      end
-      runner.converge(described_recipe)
-    end
-    it 'serves the great content we defined' do
-      expect(chef_run).to render_file('/var/www/html/index.html').with_content('ZDays rocks!')
-    end
-  end
-...
-```
-
-Running that should give us a failure since we are really TDD-ing here:
-```
-$ rake chefspec
-rspec --format doc --color
-
-myapp::default
-  When all attributes are default, on an unspecified platform
-    converges successfully
-    installs apache webserver
-    makes sure the apache service is started
-    enables the apache service when the system starts up
-  with the myapp/page_content attribute set
-    serves the great content we defined (FAILED - 1)
-
-Failures:
-
-  1) myapp::default with the myapp/page_content attribute set serves the great content we defined
-     Failure/Error: expect(chef_run).to render_file('/var/www/html/index.html').with_content('<html><body>ZDays rocks!</html></html>')
-       expected Chef run to render "/var/www/html/index.html" matching:
-
-       <html><body>ZDays rocks!</html></html>
-
-       but got:
-
-
-
-     # ./spec/unit/recipes/default_spec.rb:37:in `block (3 levels) in <top (required)>'
-
-Finished in 1.11 seconds (files took 1.11 seconds to load)
-5 examples, 1 failure
-
-```
-
-In order to make it work we have to:
-
- * add a template resource to our default recipe `recipes/default.rb`:
-```ruby
-template '/var/www/html/index.html' do
-  source 'index.html.erb'
-  variables(
-    content: node['myapp']['page_content']
-  )
-end
-```
- * add the actual template in `templates/default/index.html.erb`:
-```html
-<html><body><%= @content %></body></html>
-```
- * and probably define a default value for the node attribute in `attributes/default.rb`:
-```ruby
-node.default['myapp']['page_content'] = 'some stuff!'
-```
-
-In addition, we should also test for the default value:
-```ruby
-...
-  context 'When all attributes are default, on an unspecified platform' do
-    ...
-    it 'serves just some stuff' do
-      expect(chef_run).to render_file('/var/www/html/index.html').with_content('some stuff!')
-    end
-  end
-...
-```
-
-Finally having all specs passing :-)
-```
-$ rake chefspec
-rspec --format doc --color
-
-myapp::default
-  When all attributes are default, on an unspecified platform
-    converges successfully
-    installs apache webserver
-    makes sure the apache service is started
-    enables the apache service when the system starts up
-    serves just some stuff
-  with the myapp/page_content attribute set
-    serves the great content we defined
-
-Finished in 1.34 seconds (files took 1.1 seconds to load)
-6 examples, 0 failures
-
-```
