@@ -1,0 +1,24 @@
+Vagrant.configure(2) do |config|
+  config.vm.box = "tknerr/baseimage-ubuntu-18.04"
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  config.vm.provision "chef_apply" do |chef|
+    chef.version = "14.12.3"
+    chef.installer_download_path = "/tmp/vagrant-cache/"
+    chef.recipe = <<~RECIPE
+      package "apache2" do
+        action :install
+      end
+
+      service "apache2" do
+        action [:enable, :start]
+      end
+
+      file "/var/www/html/index.html" do
+        content "hello world!"
+      end
+
+      log "open your browser at http://localhost:8080 to see it running"
+    RECIPE
+  end
+end

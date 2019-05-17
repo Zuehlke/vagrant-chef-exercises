@@ -9,15 +9,14 @@ Covering the essential Vagrant basics. You can find more documentation here:
 
 Creating a Vagrantfile:
 ```
-$ vagrant init
-$ vagrant init bento/ubuntu-14.04 --minimal
+$ vagrant init ubuntu/xenial64 --minimal
 ```
 
 Interacting with the Vagrant VM:
 ```
 $ vagrant up
 $ vagrant ssh
-$ vagrant ssh -c "pwd"
+$ vagrant ssh -c "cat /etc/lsb-release"
 $ vagrant halt
 $ vagrant reload
 $ vagrant destroy -f
@@ -44,7 +43,7 @@ $ vagrant global-status
 Most simple one:
 ```ruby
 Vagrant.configure(2) do |config|
-  config.vm.box = "bento/ubuntu-14.04"
+  config.vm.box = "ubuntu/bionic64"
 end
 ```
 
@@ -53,7 +52,7 @@ Setting name, CPU & memory for Virtualbox provider:
 Vagrant.configure(2) do |config|
 
   # name of the basebox to be used
-  config.vm.box = "bento/ubuntu-14.04"
+  config.vm.box = "ubuntu/bionic64"
 
   # setting the display name shown in the VirtualBox GUI
   config.vm.provider "virtualbox" do |v|
@@ -75,7 +74,7 @@ $ vagrant box list
 
 Manually download a basebox (without a Vagrantfile):
 ```
-$ vagrant box add bento/ubuntu-14.04 --provider=virtualbox
+$ vagrant box add ubuntu/bionic64 --provider=virtualbox
 ```
 
 You can find baseboxes here:
@@ -90,7 +89,7 @@ The current directory where the `Vagrantfile` resides is always shared as `/vagr
 If you want to turn that off:
 ```ruby
 Vagrant.configure(2) do |config|
-  config.vm.box = "bento/ubuntu-14.04"
+  config.vm.box = "ubuntu/bionic64"
   config.vm.synced_folder ".", "/vagrant", disabled: true
 end
 ```
@@ -98,7 +97,25 @@ end
 Or, if you want to add an additional synced folder:
 ```ruby
 Vagrant.configure(2) do |config|
-  config.vm.box = "bento/ubuntu-14.04"
+  config.vm.box = "ubuntu/bionic64"
   config.vm.synced_folder "/some/path/on/host/", "/var/www/"
 end
+```
+
+### Snapshots
+
+You can easily take and restore VM snapshots via vagrant (given the underlying provider supports it):
+```
+$ vagrant snapshot save "initial-state"
+$ vagrant snapshot list
+```
+
+Let's assume you just borked the VM and want to restore to the earlier state:
+```
+$ vagrant snapshot restore "initial-state"
+```
+
+Once you no longer need that snapshot, you can also delete it:
+```
+$ vagrant snapshot delete "initial-state"
 ```

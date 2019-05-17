@@ -1,0 +1,13 @@
+DEPENDENCIES
+  jenkins (= 7.0.0)
+
+GRAPH
+  dpkg_autostart (0.2.0)
+  jenkins (7.0.0)
+    dpkg_autostart (>= 0.0.0)
+    runit (>= 1.7)
+  packagecloud (1.0.1)
+  runit (5.1.0)
+    packagecloud (>= 0.0.0)
+    yum-epel (>= 0.0.0)
+  yum-epel (3.3.0)

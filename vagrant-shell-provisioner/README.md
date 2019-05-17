@@ -5,14 +5,14 @@
 
 Create a Vagrantfile:
 ```
-$ vagrant init bento/ubuntu-14.04 --minimal
+$ vagrant init ubuntu/bionic64 --minimal
 ```
 
 Add an inline shell provisioner:
 ```ruby
 Vagrant.configure(2) do |config|
-  config.vm.box = "bento/ubuntu-14.04"
-  config.vm.provision "shell", inline: "echo hello zdays!"
+  config.vm.box = "ubuntu/bionic64"
+  config.vm.provision "shell", inline: "echo hello infracoders!"
 end
 ```
 
@@ -28,12 +28,15 @@ $ vagrant up --provision
 
 ### Using Heredocs
 
-Use heredocs for more multiline scripts:
+Use [heredocs](https://infinum.co/the-capsized-eight/multiline-strings-ruby-2-3-0-the-squiggly-heredoc) for more multiline scripts:
 ```ruby
 Vagrant.configure(2) do |config|
-  config.vm.box = "bento/ubuntu-14.04"
-  config.vm.provision "shell", inline: <<-EOF
+  config.vm.box = "ubuntu/bionic64"
+  config.vm.provision "shell", inline: <<~EOF
     echo "I am $(whoami) in $(pwd)"
+    echo "this is running on: $(cat /etc/lsb-release)"
+
+    # let's say hello to Chuck
     echo "Hello, Chuck Norris" > /tmp/hello.txt
     cat /tmp/hello.txt
   EOF
@@ -51,7 +54,7 @@ echo "hello $1"
 ...and in your `Vagrantfile`:
 ```ruby
 Vagrant.configure(2) do |config|
-  config.vm.box = "bento/ubuntu-14.04"
-  config.vm.provision "shell", path: "say_hello.sh", args: "zdays!"
+  config.vm.box = "ubuntu/bionic64"
+  config.vm.provision "shell", path: "say_hello.sh", args: "infracoders!"
 end
 ```
