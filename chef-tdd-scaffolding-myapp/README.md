@@ -14,6 +14,9 @@ name and is just good enough to get to know the Chef TDD tools.
 It will live in it's own Git repository (one repository per cookbook is a common practice
 and has various benefits), so let's create a new workspace for it in `~/myapp`.
 
+Hint: the full example can be found here:
+https://github.com/Zuehlke/cookbook-myapp
+
 ### Generating the MyApp Cookbook
 
 The ChefDK includes a command called `chef`, which lets you easily create a new cookbook structure.
