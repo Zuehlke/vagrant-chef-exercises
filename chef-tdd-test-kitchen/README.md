@@ -2,10 +2,9 @@
 
 Test-kitchen is an integration testing tool for Chef cookbooks. It is basically
 a test runner which converges a matrix of platforms and test suites for you. It
-is commonly used with Serverspec or InSpec which provide rspec matchers for testing servers:
+is commonly used with InSpec which provide rspec matchers for testing servers:
 
  * [test-kitchen](https://github.com/test-kitchen/test-kitchen)
- * [serverspec](http://serverspec.org/)
  * [inspec](https://www.inspec.io/)
 
 ### Running Test-Kitchen
@@ -353,7 +352,7 @@ $ kitchen diagnose | grep hostname
 ```
 
 So opening the browser at http://172.17.0.19 in this case should serve you
-"some stuff!" already :-)
+the helloworld example already :-)
 
 If you want it more predictable, you can set up port forwarding via localhost
 as well. In that case you need to add that to the [kitchen-vagrant](https://github.com/test-kitchen/kitchen-vagrant)
@@ -361,9 +360,9 @@ driver configuration in `.kitchen.yml`:
 ```yaml
 ...
 platforms:
-  - name: ubuntu-14.04
-    driver_config:
-      box: tknerr/baseimage-ubuntu-14.04
+  - name: ubuntu-18.04
+    driver:
+      box: tknerr/baseimage-ubuntu-18.04
       network:
         - ["forwarded_port", {guest: 80, host: 8080}]
 ...
@@ -379,150 +378,114 @@ not supported by the underlying vagrant docker provider.
 
 Enough played, let's get back to serious work and add some tests now :-)
 
- * specs can be added in `test/integration/default/serverspec/default_spec.rb`
- * the serverspec matchers are described here: http://serverspec.org/resource_types.html
+ * specs can be added in `test/integration/default/default_test.rb`
+ * the inspec resources and matchers are described here: https://www.inspec.io/docs/reference/resources/
 
 First, we probably want to check similar things as we did with ChefSpec before,
-but *against a real converged system*. In addition, we also want to check if
-the expected content is actually being served:
+but *against a real converged system*.
+
+Let's add some meaningful tests here:
 ```ruby
-require 'spec_helper'
+describe package('apache2') do
+  it { should be_installed }
+end
 
-describe 'myapp::default' do
-  it 'installs apache2' do
-    expect(package('apache2')).to be_installed
-  end
-  it 'starts the apache2 service' do
-    expect(service('apache2')).to be_running
-  end
-  it 'enables the apache2 service at startup' do
-    expect(service('apache2')).to be_enabled
-  end
+describe upstart_service('apache2') do
+  it { should be_enabled }
+  it { should be_running }
+end
 
-  context 'when no attributes are set' do
-    it 'serves just some stuff' do
-      expect(command('wget -qO- localhost').stdout).to match('some stuff!')
-    end
-  end
+describe port(80) do
+  it { should be_listening }
+  its('processes') { should include 'apache2' }
+  its('protocols') { should include 'tcp' }
+  its('addresses') { should include '0.0.0.0' }
+end
+
+describe file('/var/www/html/index.html') do
+  it { should be_file }
+  its('content') { should include 'Hello from john doe!' }
+end
+
+describe command('wget -qO- http://localhost:80') do
+  its('exit_status') { should eq 0 }
+  its('stdout') { should include 'Hello from john doe!' }
 end
 ```
 
 Since the docker container is still running from the previous step, we only
 want to trigger the verification:
 ```
-$ bundle exec kitchen verify
------> Starting Kitchen (v1.8.0)
------> Verifying <default-ubuntu-1404>...
-       Preparing files for transfer
------> Busser installation detected (busser)
-       Installing Busser plugins: busser-serverspec
-       Plugin serverspec already installed
-       Removing /tmp/verifier/suites/serverspec
-       Transferring files to <default-ubuntu-1404>
------> Running serverspec test suite
-       /opt/chef/embedded/bin/ruby -I/tmp/verifier/suites/serverspec -I/tmp/verifier/gems/gems/rspec-support-3.3.0/lib:/tmp/verifier/gems/gems/rspec-core-3.3.2/lib /opt/chef/embedded/bin/rspec --pattern /tmp/verifier/suites/serverspec/\*\*/\*_spec.rb --color --format documentation --default-path /tmp/verifier/suites/serverspec
+$ kitchen verify
+-----> Starting Kitchen (v1.24.0)
+-----> Verifying <default-ubuntu-1804>...
+       Loaded tests from {:path=>".home.user.myapp.test.integration.default"} 
 
-       myapp::default
-         installs apache2
-         starts the apache2 service
-         enables the apache2 service at startup
-         when no attributes are set
-          serves just some stuff
+Profile: tests from {:path=>"/home/user/myapp/test/integration/default"} (tests from {:path=>".home.user.myapp.test.integration.default"})
+Version: (not specified)
+Target:  ssh://vagrant@127.0.0.1:2222
 
-       Finished in 0.16236 seconds (files took 0.36505 seconds to load)
-       4 examples, 0 failures
+  System Package apache2
+     ✔  should be installed
+  Service apache2
+     ✔  should be enabled
+     ✔  should be running
+  Port 80
+     ✔  should be listening
+     ✔  processes should include "apache2"
+     ✔  protocols should include "tcp"
+     ✔  addresses should include "0.0.0.0"
+  File /var/www/html/index.html
+     ✔  should be file
+     ✔  content should include "Hello from john doe!"
+  Command: `wget -qO- http://localhost:80`
+     ✔  exit_status should eq 0
+     ✔  stdout should include "Hello from john doe!"
 
-       Finished verifying <default-ubuntu-1404> (0m4.60s).
------> Kitchen is finished. (0m5.08s)
+Test Summary: 11 successful, 0 failures, 0 skipped
+       Finished verifying <default-ubuntu-1804> (0m1.32s).
+-----> Kitchen is finished. (0m7.47s)
 ```
 
-### Adding more Platforms and Suites
+### Adding more Platforms
 
-First, lets add another suite to our `.kitchen.yml`:
-```yaml
-...
-suites:
-  - name: default
-    run_list:
-      - recipe[myapp::default]
-
-  - name: with-content
-    run_list:
-      - recipe[myapp::default]
-    attributes:
-      myapp:
-        page_content: omg we have suites!
-```
-
-We also have to add specific tests for that suite in `test/integration/with-content/serverspec/default_spec.rb`
-(note the suite name "with-content" is encoded in that path):
-```ruby
-require 'spec_helper'
-
-describe 'myapp::default' do
-  context 'when the myapp/page_content attribute is set' do
-    it 'serves the specified content' do
-      expect(command('wget -qO- localhost').stdout).to match('omg we have suites!')
-    end
-  end
-end
-```
-
-If we want to run only that suite now, we can do so by specifying a regex that
-matches "with-content-ubuntu-1404":
-```
-$ bundle exec kitchen verify content
------> Starting Kitchen (v1.8.0)
------> Creating <with-content-ubuntu-1404>...
-       Bringing machine 'default' up with 'docker' provider...
-
-(...snip)
-
------> Running serverspec test suite
-       /opt/chef/embedded/bin/ruby -I/tmp/verifier/suites/serverspec -I/tmp/verifier/gems/gems/rspec-support-3.3.0/lib:/tmp/verifier/gems/gems/rspec-core-3.3.2/lib /opt/chef/embedded/bin/rspec --pattern /tmp/verifier/suites/serverspec/\*\*/\*_spec.rb --color --format documentation --default-path /tmp/verifier/suites/serverspec
-
-       myapp::default
-         when the myapp/page_content attribute is set
-           serves the specified content
-
-       Finished in 0.11231 seconds (files took 0.36913 seconds to load)
-       1 example, 0 failures
-
-       Finished verifying <with-content-ubuntu-1404> (0m18.92s).
------> Kitchen is finished. (0m54.68s)
-```
-
-You can see that it only ran the one specific test we defined for that suite,
-as I did not want to duplicate the "basic tests" from the default suite here.
-These should be extracted into a separate file so they can be included from
-all test suites (and that is left as an exercise for the reader ;-))
-
-Finally, we could even add another platform to our `.kitchen.yml`:
+First, lets add another platform to our `.kitchen.yml`:
 ```yaml
 ...
 platforms:
-  - name: ubuntu-12.04
-    driver_config:
-      box: tknerr/baseimage-ubuntu-12.04
-  - name: ubuntu-14.04
-    driver_config:
-      box: tknerr/baseimage-ubuntu-14.04
+  - name: ubuntu-18.04
+    driver:
+      box: tknerr/baseimage-ubuntu-18.04
+  - name: ubuntu-16.04
+    driver:
+      box: tknerr/baseimage-ubuntu-16.04
+```
+
+If we want to run only a specific platform now, we can do so by specifying a regex that
+matches "ubuntu-1604":
+```
+$ kitchen verify 1604
+-----> Starting Kitchen (v1.24.0)
+-----> Creating <default-ubuntu-1604>...
+       Bringing machine 'default' up with 'docker' provider...
+
 ...
 ```
 
-That now gives us 4 combinations in total:
+That now gives us 2 combinations in total:
 ```
-$ bundle exec kitchen list
-Instance                  Driver   Provisioner  Verifier  Transport  Last Action
-default-ubuntu-1204       Vagrant  ChefZero     Busser    Ssh        <Not Created>
-default-ubuntu-1404       Vagrant  ChefZero     Busser    Ssh        <Not Created>
-with-content-ubuntu-1204  Vagrant  ChefZero     Busser    Ssh        <Not Created>
-with-content-ubuntu-1404  Vagrant  ChefZero     Busser    Ssh        <Not Created>
+$ kitchen list
+Instance             Driver   Provisioner  Verifier  Transport  Last Action    Last Error
+default-ubuntu-1804  Vagrant  ChefZero     Inspec    Ssh        <Not Created>  <None>
+default-ubuntu-1604  Vagrant  ChefZero     Inspec    Ssh        <Not Created>  <None>
 ```
+
+You could also add more suites to `.kitchen.yml` now to test with different
+parametersets for example. That would give us even more test combinations to run.
 
 You can also run them in parallel using the `--concurrency` flag:
 ```
-$ bundle exec kitchen test --concurrency=4
+$ kitchen test --concurrency=2
 ...
 ```
 
