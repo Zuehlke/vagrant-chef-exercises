@@ -45,7 +45,6 @@ First let's setup the "myapp" scenario by scaffolding the application cookbook:
 Infrastructure-as-code means infrastructure IS code, that means also want to treat it
 with the same care and love as our application code, which means we also want to test it :-)
 
- * [chef-tdd-environment](./chef-tdd-environment)
  * [chef-tdd-foodcritic](./chef-tdd-foodcritic)
  * [chef-tdd-cookstyle](./chef-tdd-cookstyle)
  * [chef-tdd-chefspec](./chef-tdd-chefspec)
