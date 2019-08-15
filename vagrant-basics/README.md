@@ -3,7 +3,7 @@
 
 Covering the essential Vagrant basics. You can find more documentation here:
 
- * https://docs.vagrantup.com/v2/
+ * https://www.vagrantup.com/docs/
 
 ### Some commands to exercise
 
@@ -79,7 +79,7 @@ $ vagrant box add ubuntu/bionic64 --provider=virtualbox
 
 You can find baseboxes here:
 
- * https://atlas.hashicorp.com/boxes/search
+ * https://app.vagrantup.com/boxes/search
 
 
 ### Synced Folders
