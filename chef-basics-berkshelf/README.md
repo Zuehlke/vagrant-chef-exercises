@@ -3,6 +3,13 @@
 Since we learned that cookbooks are the unit of packaging and distribution,
 you might be wondering how to find and reuse other library cookbooks, don't you?
 
+### Goals
+
+ * [ ] understand where to find reusable community cookbooks
+ * [ ] create a `Berksfile` and resolve dependencies
+ * [ ] understand what `Berksfile.lock` does
+ * [ ] understand how to specify dependencies in `metadata.rb`
+
 ### Where to find Cookbooks?
 
 If you are looking for other cookbooks the central place to find them is the "supermarket":

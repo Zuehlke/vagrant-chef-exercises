@@ -1,6 +1,13 @@
 
 ## Vagrant with Shell Provisioner
 
+### Goals
+
+* [ ] try different ways of running shell scripts in vagrant
+* [ ] understand how to use heredocs in `Vagrantfile`
+* [ ] understand how to trigger provisioning
+* [ ] think about issues when running the provisioner multiple times
+
 ### Basic Usage
 
 Create a Vagrantfile:

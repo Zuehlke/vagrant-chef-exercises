@@ -4,6 +4,13 @@ If you are keen enough to download a 6GB basebox, you can download one of Stefan
 
  * https://app.vagrantup.com/StefanScherer
 
+### Goals
+
+* [ ] know where to find Windows baseboxes
+* [ ] vagrant up your first windows VM
+* [ ] run powershell / bat provisioner
+* [ ] remotely log in to the Windows VM
+
 ### Basic Usage
 
 Start with creating a `Vagrantfile`:

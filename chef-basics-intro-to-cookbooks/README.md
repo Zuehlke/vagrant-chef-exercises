@@ -4,6 +4,14 @@
 In Chef, cookbooks are the reusable pieces grouping together recipes, attributes,
 templates and files.
 
+### Goals
+
+* [ ] understand the cookbook structure
+* [ ] create a minimal helloworld cookbook
+* [ ] make it parameterizable via attributes
+* [ ] run the hello cookbook locally
+* [ ] run the hello cookbook in a vagrant VM using chef_zero provisioner
+
 ### A very minimal Helloworld Cookbook
 
 Let's create the cookbook first:

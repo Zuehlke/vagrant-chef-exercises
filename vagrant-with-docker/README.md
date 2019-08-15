@@ -4,6 +4,11 @@ Testing with "fat" VirtualBox VM can become quite time consuming if you create /
 
 Thanks to the docker provider we can speed up things quite a bit by using one of the [Vagrant-friendly Docker Base Images](https://github.com/tknerr/vagrant-docker-baseimages).
 
+### Goals
+
+ * [ ] understand benefits and limitations of using docker base images
+ * [ ] bring up an ubuntu 18.04 VM with the docker provider
+
 ### CAVEAT: Containers are not VMs
 
 Please not that [containers are not VMs](https://phusion.github.io/baseimage-docker/)! There might be differences in behaviour, e.g. the init process will not start services, etc...

@@ -1,6 +1,13 @@
 
 ## Multi-VM Environments in Vagrant
 
+### Goals
+
+* [ ] understand structural difference between single and multi-vm Vagrantfiles
+* [ ] understand implications for CLI commands
+* [ ] understand the different networking modes
+* [ ] spin up a load balancer + 2 web servers with a few lines of `Vagrantfile`
+
 ### Creating Multi-VM Environments
 
 Use a `config.vm.define` block for defining multiple VMs within a single `Vagrantfile`:

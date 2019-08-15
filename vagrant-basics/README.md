@@ -5,6 +5,13 @@ Covering the essential Vagrant basics. You can find more documentation here:
 
  * https://www.vagrantup.com/docs/
 
+### Goals
+
+ * [ ] find the vagrant docs
+ * [ ] get familiar with the vagrant CLI
+ * [ ] know where to find baseboxes
+ * [ ] understand the value of `Vagrantfile`
+
 ### Some commands to exercise
 
 Creating a Vagrantfile:

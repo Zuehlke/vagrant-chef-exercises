@@ -4,6 +4,13 @@
 Chef Apply is the easiest and most minimal way to get started with the Chef DSL.
 It essentially applies single recipe (no cookbooks or whatsoever) to your local machine.
 
+### Goals
+
+* [ ] create and apply your first chef recipe locally
+* [ ] understand how Chef is idempotent
+* [ ] know the documentation for Chef resources
+* [ ] use the chef_apply provisioner in a `Vagrantfile`
+
 ### Playing around with Chef Apply locally
 
 We will start with exploring some of the builtin Chef resources from here:
