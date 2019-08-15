@@ -9,7 +9,7 @@ Covering the essential Vagrant basics. You can find more documentation here:
 
 Creating a Vagrantfile:
 ```
-$ vagrant init ubuntu/xenial64 --minimal
+$ vagrant init ubuntu/bionic64 --minimal
 ```
 
 Interacting with the Vagrant VM:
